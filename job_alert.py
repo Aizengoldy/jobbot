@@ -7,7 +7,7 @@ import traceback
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
-URL = "https://remoteok.com/api"
+URL = "https://remotive.com/api/remote-jobs"
 SEEN_FILE = "seen.json"
 
 
@@ -32,19 +32,21 @@ def save_seen(seen):
 
 def run_once():
     try:
-        print("Checking jobs from RemoteOK API")
+        print("Checking jobs from Remotive API")
 
         r = requests.get(URL, timeout=20)
         if r.status_code != 200:
             print("Non-200 response:", r.status_code)
             return
 
-        jobs = r.json()
+        data = r.json()
+        jobs = data.get("jobs", [])
+
         seen = load_seen()
         new_seen = set(seen)
 
-        for job in jobs[1:]:
-            title = job.get("position")
+        for job in jobs:
+            title = job.get("title")
             link = job.get("url")
 
             if not title or not link:
@@ -65,4 +67,4 @@ def run_once():
 
 while True:
     run_once()
-    time.sleep(300)  # check every 5 minutes
+    time.sleep(300)
