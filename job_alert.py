@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import json
+import time
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
@@ -22,7 +23,8 @@ def save_seen(data):
     json.dump(list(data), open(SEEN_FILE, "w"))
 
 def run():
-        send("Bot is running correctly ✅") 
+    send("Bot is running correctly ✅")
+
     r = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(r.text, "html.parser")
     jobs = soup.select("a.tapItem")
@@ -35,9 +37,4 @@ def run():
         link = "https://www.indeed.com" + j["href"]
 
         if link not in seen:
-            send(f"NEW JOB:\n{title}\n{link}")
-            new_seen.add(link)
-
-    save_seen(new_seen)
-
-run()
+            send(f"
