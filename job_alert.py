@@ -22,6 +22,7 @@ def save_seen(data):
     json.dump(list(data), open(SEEN_FILE, "w"))
 
 def run():
+        send("Bot is running correctly ✅") 
     r = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(r.text, "html.parser")
     jobs = soup.select("a.tapItem")
